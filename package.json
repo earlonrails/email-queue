@@ -1,5 +1,5 @@
 {
-  "name":        "emailQueue",
+  "name":        "email-queue",
   "version":     "0.0.1",
   "author":      "Kevin Krauss",
   "keywords":    "email queue",
@@ -11,7 +11,7 @@
 
   "repository" : {
     "type" : "git",
-    "url" : "https://github.com/earlonrails/emailQueue.git"
+    "url" : "https://github.com/earlonrails/email-queue.git"
   },
 
   "dependencies": {
