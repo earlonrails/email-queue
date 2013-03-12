@@ -1,6 +1,6 @@
 {
   "name":        "email-queue",
-  "version":     "0.0.1",
+  "version":     "0.0.2",
   "author":      "Kevin Krauss",
   "keywords":    "email queue",
   "description": "Allows you to queue emails to be sent in x amount of time",
@@ -17,6 +17,7 @@
   "dependencies": {
     "express": "3.x",
     "jasmine-node" : "1.0.28",
+    "request" : "2.14.0",
     "ejs" : "0.8.3"
   },
 

@@ -27,6 +27,7 @@ var stopByKey = function(key){
       queue.splice(i, 1);
     }
   }
+  return keyFound;
 };
 
 app.use(express.bodyParser());
@@ -73,10 +74,16 @@ app.get('/email_list', function(req, res){
   res.render('index', { emailList : queue, test : "test" });
 });
 
-app.listen(Number(port));
 
-if (!port && !secure) {
-  console.log('Usage: node emailQueue.js 8000 ssl # default port and optional security setting');
+if (__filename == process.argv[1]) {
+
+  app.listen(Number(port));
+
+  if (!port && !secure) {
+    console.log('Usage: node emailQueue.js 8000 ssl # default port and optional security setting');
+  }
+
+  console.log('Listening on ' + port + " " + protocol);
+} else {
+  exports.app = app;
 }
-
-console.log('Listening on ' + port + " " + protocol);
