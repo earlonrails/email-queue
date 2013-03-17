@@ -16,6 +16,11 @@ Or on Ubuntu
 
     sudo apt-get install mutt
 
+Install mongodb:
+
+    brew install mongodb
+
+
 *Optional:* Edit the `lib/emailQueue/mailCommand.json` file. Default is to use mail.
 
 Start a server.

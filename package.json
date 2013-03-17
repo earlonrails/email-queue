@@ -18,7 +18,8 @@
     "express": "3.x",
     "jasmine-node" : "1.0.28",
     "request" : "2.14.0",
-    "ejs" : "0.8.3"
+    "ejs" : "0.8.3",
+    "mongojs" : "0.7.2"
   },
 
   "directories":  {

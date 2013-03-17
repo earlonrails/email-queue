@@ -1,3 +1,7 @@
 {
-  "mailFunction" : "mail"
+  "mailFunction" : "mail",
+  "mongo": {
+    "databaseUrl": "localhost/test",
+    "collections": ["emails"]
+  }
 }

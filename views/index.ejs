@@ -9,6 +9,7 @@
 </head>
 <body>
   <div class="container">
+    <h1> Current Queue </h1>
     <table class="table table-striped table-bordered table-hover">
       <tr>
         <th>ID</th>
@@ -21,6 +22,31 @@
       </tr>
       <% for(i in emailList) {
            email = emailList[i];
+      %>
+        <tr>
+          <td><%= email.delayKey %></td>
+          <td><%= email.from %></td>
+          <td><%= email.to %></td>
+          <td><%= email.subject %></td>
+          <td><%= email.body %></td>
+          <td><%= email.delayTime %></td>
+          <td><a class="btn btn-danger" href="/stop?delayKey=<%= email.delayKey %>">Delete</a></td>
+        </tr>
+      <% } %>
+    </table>
+    <h1> History </h1>
+    <table class="table table-striped table-bordered table-hover">
+      <tr>
+        <th>ID</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Subject</th>
+        <th>Body</th>
+        <th>Delay</th>
+        <th>Delete</th>
+      </tr>
+      <% for(i in emailHistory) {
+           email = emailHistory[i];
       %>
         <tr>
           <td><%= email.delayKey %></td>
