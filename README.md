@@ -7,7 +7,11 @@ Clone & Install
 
     npm install
 
-Configure mail command. Currently mail/mailx and mutt are supported.
+Copy & Configure mail command.
+
+    cp lib/emailQueue/mailConfig.json.sample lib/emailQueue/mailConfig.json
+
+Currently mail/mailx and mutt are supported.
 Mac usually will have mail installed already. To use mutt:
 
     brew install mutt
@@ -15,13 +19,6 @@ Mac usually will have mail installed already. To use mutt:
 Or on Ubuntu
 
     sudo apt-get install mutt
-
-Install mongodb:
-
-    brew install mongodb
-
-
-*Optional:* Edit the `lib/emailQueue/mailCommand.json` file. Default is to use mail.
 
 Start a server.
 
@@ -33,3 +30,21 @@ Send a test email request.
 
     wget --post-data 'body=foo&from=bar&to=foo&subject=bar&delayTime=10000' -qO - http://localhost:8000/email
 
+Optional
+========
+
+Edit the `lib/emailQueue/mailCommand.json` file to use another email client, mutt for example.
+
+    {
+      "mailFunction" : "mutt"
+    }
+
+Default is to use mail.
+
+To track email history.
+Install mongodb:
+
+    brew install mongodb
+
+Then you will need to point the email-queue app to your mongo server. Edit the `lib/emailQueue/mailConfig.json`.
+Use the http://docs.mongodb.org/manual/reference/connection-string/ format for your `"databaseUrl"`.
