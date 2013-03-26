@@ -25,7 +25,9 @@ var stopByKey = function(key){
       envelope.queueIndex --;
     } else if (envelope.delayKey == key){
       keyFound = true;
-      clearTimeout(queue[envelope.queueIndex].delayObject);
+      if (queue[envelope.queueIndex].delayObject){
+        clearTimeout(queue[envelope.queueIndex].delayObject);
+      }
       queue.splice(i, 1);
     }
   }
