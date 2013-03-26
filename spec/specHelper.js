@@ -1,3 +1,11 @@
+// using mongojs in your config will write to your database during testing
+// checking for a file, if none then put a fixture type file in place.
+var fs         = require('fs'),
+    configFile = fs.existsSync("./lib/emailQueue/mailConfig.json");
+if (!configFile){
+  fs.writeFileSync("./lib/emailQueue/mailConfig.json", '{ "mailFunction" : "mail" }');
+}
+
 var emailQueue = require('../lib/emailQueue'),
     request = require('request');
 
