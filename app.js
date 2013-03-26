@@ -2,10 +2,15 @@ var fs             = require('fs'),
     path           = require('path'),
     express        = require('express'),
     emailQueue     = require('./lib/emailQueue'),
+    db             = require("mongojs"),
     app            = express(),
-    mailConfig = require('./lib/emailQueue/mailConfig.json');
+    mailConfig = require('./lib/emailQueue/mailConfig.json'),
+    mongoConnection;
 
-var db = require("mongojs").connect(mailConfig.mongo.databaseUrl, mailConfig.mongo.collections);
+if (mailConfig.mongo){
+  mongoConnection = db.connect(mailConfig.mongo.databaseUrl, mailConfig.mongo.collections);
+}
+
 var PUBLIC_DIR = path.dirname(__filename) + '/public',
     SHARED_DIR = path.dirname(__filename) + '/shared';
 
@@ -45,10 +50,15 @@ app.post('/email', function(req, res){
       delayTime   = req.param('delayTime', null),
       envelope    = { 'body' : body, 'from' : from, 'to' : to, 'subject' : subject, 'delayTime' : delayTime, 'queueIndex' :  queue.length, 'delayKey' : (queue.length + new Date().valueOf()) };
       envelope.delayObject = emailQueue.delay(delayTime, function(){
-        db.emails.save(envelope, function(err, saved) {
-          if( err || !saved ) console.log("email not saved");
-          else console.log("email saved");
-        });
+        if (mailConfig.mongo){
+          mongoConnection.emails.save(envelope, function(err, saved) {
+            if( err || !saved ) {
+              console.log("email not saved");
+            } else {
+              console.log("email saved");
+            }
+          });
+        }
 
         emailQueue.mail(envelope);
         stopByKey(envelope.delayKey);
@@ -80,9 +90,13 @@ app.get('/stop', function(req, res){
 });
 
 app.get('/email_list', function(req, res){
-  db.emails.find(function(err, docs) {
-    res.render('index', { emailList : queue, emailHistory: docs });
-  });
+  if (mailConfig.mongo){
+    mongoConnection.emails.find(function(err, docs) {
+      res.render('index', { emailList : queue, emailHistory: docs });
+    });
+  } else {
+    res.render('index', { emailList : queue });
+  }
 });
 
 if (__filename == process.argv[1]) {
