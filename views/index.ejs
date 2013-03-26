@@ -43,7 +43,6 @@
         <th>Subject</th>
         <th>Body</th>
         <th>Delay</th>
-        <th>Delete</th>
       </tr>
       <% for(i in emailHistory) {
            email = emailHistory[i];
@@ -55,7 +54,6 @@
           <td><%= email.subject %></td>
           <td><%= email.body %></td>
           <td><%= email.delayTime %></td>
-          <td><a class="btn btn-danger" href="/stop?delayKey=<%= email.delayKey %>">Delete</a></td>
         </tr>
       <% } %>
     </table>
