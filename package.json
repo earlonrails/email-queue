@@ -22,6 +22,10 @@
     "mongojs" : "0.7.2"
   },
 
+  "scripts": {
+    "test" : "jasmine-node spec"
+  },
+
   "directories":  {
     "lib": "./src"
   },
