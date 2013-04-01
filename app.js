@@ -48,7 +48,17 @@ app.post('/email', function(req, res){
       to          = req.param('to', null),
       subject     = req.param('subject', null),
       delayTime   = req.param('delayTime', null),
-      envelope    = { 'body' : body, 'from' : from, 'to' : to, 'subject' : subject, 'delayTime' : delayTime, 'queueIndex' :  queue.length, 'delayKey' : (queue.length + new Date().valueOf()) };
+      currentTimeStamp = new Date(),
+      envelope    = { "body" : body,
+                      "from" : from,
+                      "to" : to,
+                      "subject" : subject,
+                      "delayTime" : delayTime,
+                      "queueIndex" :  queue.length,
+                      "delayKey" : (queue.length + currentTimeStamp.valueOf()),
+                      "createdAt" : currentTimeStamp.toLocaleString()
+                    };
+
       envelope.delayObject = emailQueue.delay(delayTime, function(){
         if (mailConfig.mongo){
           mongoConnection.emails.save(envelope, function(err, saved) {
