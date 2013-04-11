@@ -105,7 +105,7 @@ app.get('/email_list', function(req, res){
       res.render('index', { emailList : queue, emailHistory: docs });
     });
   } else {
-    res.render('index', { emailList : queue });
+    res.render('index', { emailList : queue, emailHistory : [] });
   }
 });
 
