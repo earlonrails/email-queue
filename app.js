@@ -3,8 +3,9 @@ var fs             = require('fs'),
     express        = require('express'),
     emailQueue     = require('./lib/emailQueue'),
     db             = require("mongojs"),
+    Queue          = emailQueue.Queue,
     app            = express(),
-    mailConfig = require('./lib/emailQueue/mailConfig.json'),
+    mailConfig     = require('./lib/emailQueue/mailConfig.json'),
     mongoConnection;
 
 if (mailConfig.mongo){
@@ -20,24 +21,7 @@ var port      = process.argv[2] || '8000',
                 cert: fs.readFileSync(SHARED_DIR + '/server.crt')
     },
     protocol  = secure ? 'https' : 'http',
-    queue     = [];
-
-var stopByKey = function(key){
-  keyFound = false;
-  for (var i = 0; i < queue.length; i++){
-    var envelope = queue[i];
-    if (keyFound) {
-      envelope.queueIndex --;
-    } else if (envelope.delayKey == key){
-      keyFound = true;
-      if (queue[envelope.queueIndex].delayObject){
-        clearTimeout(queue[envelope.queueIndex].delayObject);
-      }
-      queue.splice(i, 1);
-    }
-  }
-  return keyFound;
-};
+    queue     = new Queue();
 
 app.use(express.bodyParser());
 app.set('view engine', 'ejs');
@@ -54,8 +38,7 @@ app.post('/email', function(req, res){
                       "to" : to,
                       "subject" : subject,
                       "delayTime" : delayTime,
-                      "queueIndex" :  queue.length,
-                      "delayKey" : (queue.length + currentTimeStamp.valueOf()),
+                      "delayKey" : (Object.keys(queue) + currentTimeStamp.valueOf()),
                       "createdAt" : currentTimeStamp.toLocaleString()
                     };
 
@@ -71,27 +54,15 @@ app.post('/email', function(req, res){
         }
 
         emailQueue.mail(envelope);
-        stopByKey(envelope.delayKey);
+        queue.stopByKey(envelope.delayKey);
       });
-      queue.push(envelope);
+      queue[envelope.delayKey] = envelope;
   res.send(String(envelope.delayKey));
-});
-
-app.get('/stop_by_idx', function(req, res){
-  var queueIndex = req.param('queueIndex', null);
-  clearTimeout(queue[queueIndex].delayObject);
-  queue.splice(queueIndex, 1);
-  var updateArray = queue.slice(queueIndex, queue.length)
-  for(idx in updateArray){
-    var notRemovedElement = updateArray[idx];
-    notRemovedElement.queueIndex --;
-  }
-  res.redirect('/email_list');
 });
 
 app.get('/stop', function(req, res){
   var delayKey = req.param('delayKey', null);
-  var foundKey = stopByKey(delayKey);
+  var foundKey = queue.stopByKey(delayKey);
   if (foundKey){
     res.render('success');
   } else {
@@ -102,9 +73,11 @@ app.get('/stop', function(req, res){
 app.get('/email_list', function(req, res){
   if (mailConfig.mongo){
     mongoConnection.emails.find(function(err, docs) {
+      console.dir(queue);
       res.render('index', { emailList : queue, emailHistory: docs });
     });
   } else {
+    console.dir(queue);
     res.render('index', { emailList : queue, emailHistory : [] });
   }
 });
