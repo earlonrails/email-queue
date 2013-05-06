@@ -52,7 +52,6 @@ app.post('/email', function(req, res){
             }
           });
         }
-
         emailQueue.mail(envelope);
         queue.stopByKey(envelope.delayKey);
       });
@@ -73,11 +72,9 @@ app.get('/stop', function(req, res){
 app.get('/email_list', function(req, res){
   if (mailConfig.mongo){
     mongoConnection.emails.find(function(err, docs) {
-      console.dir(queue);
       res.render('index', { emailList : queue, emailHistory: docs });
     });
   } else {
-    console.dir(queue);
     res.render('index', { emailList : queue, emailHistory : [] });
   }
 });
