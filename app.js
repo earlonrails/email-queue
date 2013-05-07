@@ -9,7 +9,8 @@ var fs             = require('fs'),
     mongoConnection;
 
 if (mailConfig.mongo){
-  mongoConnection = db.connect(mailConfig.mongo.databaseUrl, mailConfig.mongo.collections);
+  var databaseUrl = process.env.EMAIL_QUEUE_MONGO_URL;
+  mongoConnection = db.connect(databaseUrl, mailConfig.mongo.collections);
 }
 
 var PUBLIC_DIR = path.dirname(__filename) + '/public',

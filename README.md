@@ -46,5 +46,8 @@ Install mongodb:
 
     brew install mongodb
 
-Then you will need to point the email-queue app to your mongo server. Edit the `lib/emailQueue/mailConfig.json`.
+Then you will need to point the email-queue app to your mongo server, by setting the environment variable:
+
+    EMAIL_QUEUE_MONGO_URL=mongodb://bob:bobIScool@localhost:27017/test
+
 Use the http://docs.mongodb.org/manual/reference/connection-string/ format for your `"databaseUrl"`.
