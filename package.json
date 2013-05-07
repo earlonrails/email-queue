@@ -1,6 +1,6 @@
 {
   "name":        "email-queue",
-  "version":     "0.0.7",
+  "version":     "0.1.0",
   "author":      "Kevin Krauss",
   "keywords":    "email queue",
   "description": "Allows you to queue emails to be sent in x amount of time",
